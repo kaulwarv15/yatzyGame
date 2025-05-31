@@ -36,4 +36,9 @@ public class YatzyJavaTest {
         assertEquals(0, YatzyJava.Category.FOUR_OF_A_KIND.score(new YatzyJava.DiceRoll(3, 3, 3, 1, 2)));
         assertEquals(16, YatzyJava.Category.FOUR_OF_A_KIND.score(new YatzyJava.DiceRoll(4, 4, 4, 4, 2)));
     }
+
+    @Test
+    void testChance() {
+        assertEquals(21, YatzyJava.Category.CHANCE.score(new YatzyJava.DiceRoll(6, 6, 1, 2, 6)));
+    }
 }

@@ -15,7 +15,7 @@ public class YatzyJava {
         PAIR(dice -> dice.highestNOfAKind(2)),
         THREE_OF_A_KIND(dice -> dice.nOfAKind(3)),
         FOUR_OF_A_KIND(dice -> dice.nOfAKind(4)),
-
+        CHANCE(DiceRoll::sum),
         YATZY(dice -> dice.allSame() ? 50 : 0);
 
         private final Function<DiceRoll, Integer> scorer;
