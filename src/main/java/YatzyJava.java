@@ -13,6 +13,7 @@ public class YatzyJava {
         FIVES(dice -> dice.sumOf(5)),
         SIXES(dice -> dice.sumOf(6)),
         PAIR(dice -> dice.highestNOfAKind(2)),
+        TWO_PAIRS(DiceRoll::twoPairs),
         THREE_OF_A_KIND(dice -> dice.nOfAKind(3)),
         FOUR_OF_A_KIND(dice -> dice.nOfAKind(4)),
         CHANCE(DiceRoll::sum),
@@ -64,6 +65,16 @@ public class YatzyJava {
                     .max(Integer::compareTo)
                     .map(k -> k * n)
                     .orElse(0);
+        }
+
+        public int twoPairs() {
+            List<Integer> pairs = counts.entrySet().stream()
+                    .filter(e -> e.getValue() >= 2)
+                    .map(Map.Entry::getKey)
+                    .sorted(Comparator.reverseOrder())
+                    .limit(2)
+                    .toList();
+            return pairs.size() == 2 ? pairs.get(0) * 2 + pairs.get(1) * 2 : 0;
         }
 
         public boolean matchesExact(int... expected) {

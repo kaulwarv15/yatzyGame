@@ -41,4 +41,12 @@ public class YatzyJavaTest {
     void testChance() {
         assertEquals(21, YatzyJava.Category.CHANCE.score(new YatzyJava.DiceRoll(6, 6, 1, 2, 6)));
     }
+
+    @Test
+    void testTwoPairs() {
+        assertEquals(16, YatzyJava.Category.TWO_PAIRS.score(new YatzyJava.DiceRoll(3, 3, 5, 5, 1)));
+        assertEquals(0, YatzyJava.Category.TWO_PAIRS.score(new YatzyJava.DiceRoll(1, 2, 2, 3, 4)));
+        assertEquals(10, YatzyJava.Category.TWO_PAIRS.score(new YatzyJava.DiceRoll(2, 2, 3, 3, 3)));
+    }
+
 }
