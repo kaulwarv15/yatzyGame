@@ -7,7 +7,11 @@ public class YatzyJava {
 
     public enum Category {
         ONES(dice -> dice.sumOf(1)),
+        TWOS(dice -> dice.sumOf(2)),
         THREES(dice -> dice.sumOf(3)),
+        FOURS(dice -> dice.sumOf(4)),
+        FIVES(dice -> dice.sumOf(5)),
+        SIXES(dice -> dice.sumOf(6)),
         YATZY(dice -> dice.allSame() ? 50 : 0);
 
         private final Function<DiceRoll, Integer> scorer;
