@@ -15,7 +15,10 @@ public class YatzyJavaTest {
     @Test
     void testOnesToSixes() {
         assertEquals(2, YatzyJava.Category.ONES.score(new YatzyJava.DiceRoll(1, 1, 3, 4, 5)));
+        assertEquals(4, YatzyJava.Category.TWOS.score(new YatzyJava.DiceRoll(2, 2, 3, 4, 5)));
         assertEquals(9, YatzyJava.Category.THREES.score(new YatzyJava.DiceRoll(3, 3, 3, 2, 1)));
+        assertEquals(8, YatzyJava.Category.FOURS.score(new YatzyJava.DiceRoll(4, 4, 1, 2, 3)));
+        assertEquals(10, YatzyJava.Category.FIVES.score(new YatzyJava.DiceRoll(5, 1, 5, 2, 3)));
         assertEquals(0, YatzyJava.Category.SIXES.score(new YatzyJava.DiceRoll(1, 2, 3, 4, 5)));
     }
 
