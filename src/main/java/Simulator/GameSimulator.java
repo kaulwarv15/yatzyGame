@@ -37,11 +37,14 @@ public class GameSimulator {
         }
     }
 
-    public Category chooseCategory(DiceRoll roll) {
+public Category chooseCategory(DiceRoll roll) {
         return Arrays.stream(Category.values())
+                .filter(c -> c != Category.CHANCE)
+                .filter(c -> c.score(roll) > 0)
                 .max(Comparator.comparingInt(c -> c.score(roll)))
                 .orElse(Category.CHANCE);
     }
+
 
     public String getOutcome(Category category, int score) {
         if (score == 0) return "NOTHING";
