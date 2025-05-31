@@ -1,7 +1,6 @@
-# Yatzy Game Simulator (Java)
+# Yatzy Java Simulation
 
-A modular, test-driven simulation of the Yatzy dice game in Java, with support for various scoring categories, console and file output, and automated category selection based on optimal score.
-
+- This project simulates the classic Yatzy dice game in Java using clean code principles, object-oriented design, and a testable structure.
 ---
 
 # Stack
@@ -13,29 +12,29 @@ A modular, test-driven simulation of the Yatzy dice game in Java, with support f
 
 ---
 
+## Problem Statement
+
+- Score a **given roll** in a **given category** based on Yatzy rules. The game is **not** about choosing the best category automatically — it's about scoring a roll in a specified category.
+---
+
 ## Features Implemented
 
--  **Dice Rolling**: Simulates rolling dice using Java's `Random` class.
--  **Score Calculation**: Supports all major Yatzy categories including:
-    - YATZY, FULL_HOUSE, PAIR, TWO_PAIRS, THREE_OF_A_KIND, FOUR_OF_A_KIND
-    - SMALL_STRAIGHT, LARGE_STRAIGHT
-    - ONES to SIXES
-    - CHANCE
--  **Automatic Category Selection**: Picks the best scoring category automatically for each roll.
--  **Flexible Output**: Choose between console output or file output using strategy pattern.
--  **Unit Testing**: JUnit 5 test coverage with over 0.80 code coverage achieved.
+- Java-based scoring logic for all official Yatzy categories.
+- Clean and extensible domain model using enums, strategies, and output abstractions.
+- Support for Console and File outputs using Strategy Pattern.
+- Full simulation of a Yatzy game session with **3 predefined rolls**.
+- Scoring logic follows official Yatzy rules strictly.
+- Unit tests using JUnit 5 and AssertJ
 
 ---
 
 ## Recent Enhancements
 
 -  Refactored `Category` enum to centralize all scoring logic.
--  Added new `GameSimulator` class to automate full game simulation.
+-  Added new `GameSimulator` class for full game simulation.
 -  Added `FileOutput` and `OutputStrategy` for file-based output support.
 -  Integrated tests for:
     - Dice logic (`DiceRoll`)
-    - All category scoring
-    - Category selection logic
     - File output validation
     - Simulation flow using mocked output
 

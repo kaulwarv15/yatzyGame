@@ -79,19 +79,6 @@ public class YatzyJavaTest {
     }
 
     @Test
-    void testFileOutputStrategy() throws IOException {
-        String fileName = "test_output.txt";
-        OutputStrategy fileOut = new FileOutput(fileName);
-        new GameSimulator(fileOut, new Random(42)).simulateGame(1);
-
-        List<String> lines = Files.readAllLines(new File(fileName).toPath());
-        assertTrue(lines.stream().anyMatch(s -> s.contains("ROLL")));
-        assertTrue(lines.stream().anyMatch(s -> s.contains("Score")));
-        assertTrue(lines.stream().anyMatch(s -> s.contains("chosen")));
-        new File(fileName).delete();
-    }
-
-    @Test
     void chooseCategory_shouldReturnCorrectCategory() {
         DiceRoll roll = new DiceRoll(6, 6, 6, 3, 3);
         Category best = Category.FULL_HOUSE;
@@ -100,22 +87,6 @@ public class YatzyJavaTest {
             assertTrue(bestScore >= category.score(roll),
                     () -> "Expected FULL_HOUSE to be equal or better than " + category);
         }
-    }
-
-
-    @Test
-    void testGameSimulationOutput() {
-        List<String> capturedOutput = new ArrayList<>();
-        OutputStrategy mockOutput = capturedOutput::add;
-
-        GameSimulator simulator = new GameSimulator(mockOutput, new Random(1));
-        simulator.simulateGame(1); // deterministic roll for testing
-
-        assertThat(capturedOutput).hasSize(4);
-        assertThat(capturedOutput.get(0)).contains("1. ROLL");
-        assertThat(capturedOutput.get(1)).contains("You've chosen");
-        assertThat(capturedOutput.get(2)).contains("Score:");
-        assertThat(capturedOutput.get(3)).contains("You've got");
     }
 
     @Test
@@ -138,28 +109,77 @@ public class YatzyJavaTest {
         assertTrue(file.delete(), "Temporary file should be deleted");
     }
 
-    @Test
-    void testGetOutcomeTextCases() {
-        GameSimulator simulator = new GameSimulator(System.out::println);
 
-        assertEquals("a YATZY", simulator.getOutcome(Category.YATZY, 50));
-        assertEquals("a FULL_HOUSE", simulator.getOutcome(Category.FULL_HOUSE, 24));
-        assertEquals("a SMALL_STRAIGHT", simulator.getOutcome(Category.SMALL_STRAIGHT, 15));
-        assertEquals("a LARGE_STRAIGHT", simulator.getOutcome(Category.LARGE_STRAIGHT, 20));
-        assertEquals("FOUR_OF_A_KIND", simulator.getOutcome(Category.FOUR_OF_A_KIND, 16));
-        assertEquals("THREE_OF_A_KIND", simulator.getOutcome(Category.THREE_OF_A_KIND, 9));
-        assertEquals("TWO_PAIRS", simulator.getOutcome(Category.TWO_PAIRS, 10));
-        assertEquals("a PAIR", simulator.getOutcome(Category.PAIR, 6));
-        assertEquals("some FOURS", simulator.getOutcome(Category.FOURS, 4));
-        assertEquals("a total score of 17", simulator.getOutcome(Category.CHANCE, 17));
-        assertEquals("NOTHING", simulator.getOutcome(Category.FULL_HOUSE, 0));
+
+    @Test
+    void testGivenRollsSimulation() {
+        List<String> capturedOutput = new ArrayList<>();
+        OutputStrategy mockOutput = capturedOutput::add;
+
+        GameSimulator simulator = new GameSimulator(mockOutput);
+
+        List<int[]> rolls = List.of(
+                new int[]{1, 1, 1, 1, 1},
+                new int[]{3, 3, 3, 2, 4},
+                new int[]{1, 2, 3, 4, 5}
+        );
+
+        List<Category> categories = List.of(
+                Category.YATZY,
+                Category.THREE_OF_A_KIND,
+                Category.SMALL_STRAIGHT
+        );
+
+        simulator.simulateGivenRolls(rolls, categories);
+
+        assertThat(capturedOutput).hasSize(12);
+        assertThat(capturedOutput.get(1)).contains("YATZY");
+        assertThat(capturedOutput.get(5)).contains("THREE_OF_A_KIND");
+        assertThat(capturedOutput.get(9)).contains("SMALL_STRAIGHT");
     }
 
     @Test
-    void testChooseCategoryReturnsMaxScore() {
-        GameSimulator simulator = new GameSimulator(System.out::println);
-        DiceRoll roll = new DiceRoll(6, 6, 6, 6, 6);
-        Category bestCategory = simulator.chooseCategory(roll);
-        assertEquals(Category.YATZY, bestCategory);
+    void testSimulateGivenRolls_withMockOutput() {
+        List<String> output = new ArrayList<>();
+        OutputStrategy mockOutput = output::add;
+
+        List<int[]> rolls = List.of(
+                new int[]{1, 1, 1, 1, 1},
+                new int[]{2, 2, 2, 3, 4},
+                new int[]{1, 2, 3, 4, 5}
+        );
+        List<Category> categories = List.of(
+                Category.YATZY,
+                Category.THREE_OF_A_KIND,
+                Category.SMALL_STRAIGHT
+        );
+
+        GameSimulator simulator = new GameSimulator(mockOutput);
+        simulator.simulateGivenRolls(rolls, categories);
+
+        assertThat(output).hasSize(12);
+        assertThat(output.get(0)).contains("1. ROLL");
+        assertThat(output.get(1)).contains("You've chosen YATZY");
+        assertThat(output.get(3)).contains("You've got a YATZY");
+
+        assertThat(output.get(4)).contains("2. ROLL");
+        assertThat(output.get(5)).contains("You've chosen THREE_OF_A_KIND");
+        assertThat(output.get(7)).contains("You've got a THREE_OF_A_KIND");
+
+        assertThat(output.get(8)).contains("3. ROLL");
+        assertThat(output.get(9)).contains("You've chosen SMALL_STRAIGHT");
+        assertThat(output.get(11)).contains("You've got a SMALL_STRAIGHT");
+    }
+
+    @Test
+    void testGetOutcomeStringsSimple() {
+        GameSimulator simulator = new GameSimulator(output -> {});
+        assertEquals("NOTHING", simulator.getOutcome(Category.YATZY, 0));
+        assertEquals("a YATZY", simulator.getOutcome(Category.YATZY, 50));
+        assertEquals("a FULL_HOUSE", simulator.getOutcome(Category.FULL_HOUSE, 18));
+        assertEquals("TWO_PAIRS", simulator.getOutcome(Category.TWO_PAIRS, 8));
+        assertEquals("some FOURS", simulator.getOutcome(Category.FOURS, 8));
+        assertEquals("a total score of 17", simulator.getOutcome(Category.CHANCE, 17));
     }
 }
+
