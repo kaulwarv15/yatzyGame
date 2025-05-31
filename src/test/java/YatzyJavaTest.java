@@ -27,4 +27,13 @@ public class YatzyJavaTest {
         assertEquals(50, YatzyJava.Category.YATZY.score(new YatzyJava.DiceRoll(4, 4, 4, 4, 4)));
         assertEquals(0, YatzyJava.Category.YATZY.score(new YatzyJava.DiceRoll(4, 4, 4, 4, 5)));
     }
+
+    @Test
+    void testPairsAndKinds() {
+        assertEquals(12, YatzyJava.Category.PAIR.score(new YatzyJava.DiceRoll(6, 6, 1, 2, 3)));
+        assertEquals(10, YatzyJava.Category.PAIR.score(new YatzyJava.DiceRoll(6, 5, 5, 5, 5)));
+        assertEquals(9, YatzyJava.Category.THREE_OF_A_KIND.score(new YatzyJava.DiceRoll(3, 3, 3, 1, 2)));
+        assertEquals(0, YatzyJava.Category.FOUR_OF_A_KIND.score(new YatzyJava.DiceRoll(3, 3, 3, 1, 2)));
+        assertEquals(16, YatzyJava.Category.FOUR_OF_A_KIND.score(new YatzyJava.DiceRoll(4, 4, 4, 4, 2)));
+    }
 }

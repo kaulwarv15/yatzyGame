@@ -12,6 +12,10 @@ public class YatzyJava {
         FOURS(dice -> dice.sumOf(4)),
         FIVES(dice -> dice.sumOf(5)),
         SIXES(dice -> dice.sumOf(6)),
+        PAIR(dice -> dice.highestNOfAKind(2)),
+        THREE_OF_A_KIND(dice -> dice.nOfAKind(3)),
+        FOUR_OF_A_KIND(dice -> dice.nOfAKind(4)),
+
         YATZY(dice -> dice.allSame() ? 50 : 0);
 
         private final Function<DiceRoll, Integer> scorer;
@@ -44,6 +48,22 @@ public class YatzyJava {
 
         public boolean allSame() {
             return counts.size() == 1;
+        }
+
+        public int nOfAKind(int n) {
+            return counts.entrySet().stream()
+                    .filter(e -> e.getValue() >= n)
+                    .mapToInt(e -> e.getKey() * n)
+                    .max()
+                    .orElse(0);
+        }
+
+        public int highestNOfAKind(int n) {
+            return counts.keySet().stream()
+                    .filter(k -> counts.get(k) >= n)
+                    .max(Integer::compareTo)
+                    .map(k -> k * n)
+                    .orElse(0);
         }
 
         public boolean matchesExact(int... expected) {
