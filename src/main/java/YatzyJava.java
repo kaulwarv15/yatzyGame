@@ -19,7 +19,8 @@ public class YatzyJava {
         CHANCE(DiceRoll::sum),
         YATZY(dice -> dice.allSame() ? 50 : 0),
         SMALL_STRAIGHT(dice -> dice.matchesExact(1, 2, 3, 4, 5) ? 15 : 0),
-        LARGE_STRAIGHT(dice -> dice.matchesExact(2, 3, 4, 5, 6) ? 20 : 0);
+        LARGE_STRAIGHT(dice -> dice.matchesExact(2, 3, 4, 5, 6) ? 20 : 0),
+        FULL_HOUSE(DiceRoll::fullHouse);
 
         private final Function<DiceRoll, Integer> scorer;
 
@@ -77,6 +78,18 @@ public class YatzyJava {
                     .limit(2)
                     .toList();
             return pairs.size() == 2 ? pairs.get(0) * 2 + pairs.get(1) * 2 : 0;
+        }
+
+        public int fullHouse() {
+            Optional<Integer> three = counts.entrySet().stream()
+                    .filter(e -> e.getValue() == 3)
+                    .map(Map.Entry::getKey)
+                    .findFirst();
+            Optional<Integer> two = counts.entrySet().stream()
+                    .filter(e -> e.getValue() == 2)
+                    .map(Map.Entry::getKey)
+                    .findFirst();
+            return (three.isPresent() && two.isPresent()) ? three.get() * 3 + two.get() * 2 : 0;
         }
 
         public boolean matchesExact(int... expected) {

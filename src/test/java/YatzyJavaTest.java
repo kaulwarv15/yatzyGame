@@ -55,4 +55,10 @@ public class YatzyJavaTest {
         assertEquals(20, YatzyJava.Category.LARGE_STRAIGHT.score(new YatzyJava.DiceRoll(2, 3, 4, 5, 6)));
     }
 
+    @Test
+    void testFullHouse() {
+        assertEquals(24, YatzyJava.Category.FULL_HOUSE.score(new YatzyJava.DiceRoll(6, 6, 6, 3, 3)));
+        assertEquals(0, YatzyJava.Category.FULL_HOUSE.score(new YatzyJava.DiceRoll(2, 2, 3, 3, 4)));
+    }
+
 }
