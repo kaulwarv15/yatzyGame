@@ -1,114 +1,80 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
-    id "com.adarshr.test-logger" version "3.2.0"
-    id 'jacoco-report-aggregation'
-    id 'io.gitlab.arturbosch.detekt' version '1.23.0'
-}
-
-
-repositories {
-    mavenCentral()
+    id 'java'
+    id 'jacoco'
+    id 'com.adarshr.test-logger' version '3.2.0'
 }
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
 
-dependencies {
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+repositories {
+    mavenCentral()
+}
 
+dependencies {
     // JUnit Jupiter
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     // AssertJ dependency
     testImplementation 'org.assertj:assertj-core:3.21.0'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+jacoco {
+    toolVersion = "0.8.10"
 }
-kotlin {
-    jvmToolchain(17)
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
 }
 
 jacocoTestCoverageVerification {
+    dependsOn jacocoTestReport
     violationRules {
         rule {
             limit {
                 counter = 'LINE'
-                minimum = 0.800000
+                minimum = 0.80
             }
         }
     }
 }
 
-tasks.named('check') {
-    dependsOn tasks.named('testCodeCoverageReport', JacocoReport)
-    dependsOn tasks.named('jacocoTestCoverageVerification')
+tasks.named("check") {
+    dependsOn("jacocoTestCoverageVerification")
 }
-
-detekt {
-    ignoreFailures = true // set me false to fail on error
-    config.setFrom("$projectDir/config/detekt/detekt.yml")
-    buildUponDefaultConfig = false // preconfigure defaults
-    allRules = false // activate all available (even unstable) rules.
-    reports {
-        html.required = true
-    }
-}
-
 
 testlogger {
-    // pick a theme - mocha, standard, plain, mocha-parallel, standard-parallel or plain-parallel
-    theme 'mocha-parallel'
-
-    // set to false to disable detailed failure logs
-    showExceptions true
-
-    // set to false to hide stack traces
-    showStackTraces true
-
-    // set to true to remove any filtering applied to stack traces
-    showFullStackTraces false
-
-    // set to false to hide exception causes
-    showCauses true
-
-    // set threshold in milliseconds to highlight slow tests
-    slowThreshold 2000
-
-    // displays a breakdown of passes, failures and skips along with total duration
-    showSummary true
-
-    // set to true to see simple class names
-    showSimpleNames false
-
-    // set to false to hide passed tests
-    showPassed true
-
-    // set to false to hide skipped tests
-    showSkipped true
-
-    // set to false to hide failed tests
-    showFailed true
-
-    // enable to see standard out and error streams inline with the test results
-    showStandardStreams false
-
-    // set to false to hide passed standard out and error streams
-    showPassedStandardStreams true
-
-    // set to false to hide skipped standard out and error streams
-    showSkippedStandardStreams true
-
-    // set to false to hide failed standard out and error streams
-    showFailedStandardStreams true
+    theme = 'mocha-parallel'
+    showExceptions = true
+    showStackTraces = true
+    showFullStackTraces = false
+    showCauses = true
+    slowThreshold = 2000
+    showSummary = true
+    showSimpleNames = false
+    showPassed = true
+    showSkipped = true
+    showFailed = true
+    showStandardStreams = false
+    showPassedStandardStreams = true
+    showSkippedStandardStreams = true
+    showFailedStandardStreams = true
 }
