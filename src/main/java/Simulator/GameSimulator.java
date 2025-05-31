@@ -22,7 +22,7 @@ public class GameSimulator {
 
     public void simulateGame(int rounds) {
         for (int i = 1; i <= rounds; i++) {
-            int[] roll = random.ints(5, 0, 6).toArray();
+            int[] roll = random.ints(5, 1, 7).toArray();
             DiceRoll diceRoll = new DiceRoll(roll);
             Category chosenCategory = chooseCategory(diceRoll);
             int score = chosenCategory.score(diceRoll);
