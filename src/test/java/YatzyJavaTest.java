@@ -11,4 +11,11 @@ public class YatzyJavaTest {
         assertEquals(15, roll.sum());
         assertTrue(roll.matchesExact(1, 2, 3, 4, 5));
     }
+
+    @Test
+    void testOnesToSixes() {
+        assertEquals(2, YatzyJava.Category.ONES.score(new YatzyJava.DiceRoll(1, 1, 3, 4, 5)));
+    }
+
+
 }
