@@ -17,7 +17,9 @@ public class YatzyJava {
         THREE_OF_A_KIND(dice -> dice.nOfAKind(3)),
         FOUR_OF_A_KIND(dice -> dice.nOfAKind(4)),
         CHANCE(DiceRoll::sum),
-        YATZY(dice -> dice.allSame() ? 50 : 0);
+        YATZY(dice -> dice.allSame() ? 50 : 0),
+        SMALL_STRAIGHT(dice -> dice.matchesExact(1, 2, 3, 4, 5) ? 15 : 0),
+        LARGE_STRAIGHT(dice -> dice.matchesExact(2, 3, 4, 5, 6) ? 20 : 0);
 
         private final Function<DiceRoll, Integer> scorer;
 

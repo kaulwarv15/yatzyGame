@@ -49,4 +49,10 @@ public class YatzyJavaTest {
         assertEquals(10, YatzyJava.Category.TWO_PAIRS.score(new YatzyJava.DiceRoll(2, 2, 3, 3, 3)));
     }
 
+    @Test
+    void testStraights() {
+        assertEquals(15, YatzyJava.Category.SMALL_STRAIGHT.score(new YatzyJava.DiceRoll(1, 2, 3, 4, 5)));
+        assertEquals(20, YatzyJava.Category.LARGE_STRAIGHT.score(new YatzyJava.DiceRoll(2, 3, 4, 5, 6)));
+    }
+
 }
